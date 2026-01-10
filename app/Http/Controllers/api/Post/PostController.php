@@ -147,9 +147,21 @@ class PostController extends Controller
         $request->validate([
             'post_id' => 'required|numeric',
         ]);
+
+        $userId = $request->user()->id;
+        $alreadyLiked = Like::where('user_id', $userId)
+        ->where('post_id', $request->post_id)
+        ->exists();
+
+        if ($alreadyLiked) {
+            return response()->json([
+                'status'  => 0,
+                'message' => 'You already liked this post.',
+            ], 409);
+        }
         
         $like = Like::create([
-            'user_id'   => $request->user()->id,
+            'user_id'   => $userId,
             'post_id'   => $request->post_id,
         ]);
 
@@ -180,19 +192,27 @@ class PostController extends Controller
 
     public function reject(Request $request, $id) {
 
-    $request->validate([
-        'reason' => 'required|max:500'
-    ]);
-    $post = Post::findOrFail($id);
-    $post->update([
-        'status' => 'rejected'
-    ]);
-    $reason = PostRejectReason::create([
-        'user_id'   => $request->user()->id,
-        'post_id' => $id,
-        'reason' => $request->reason
-    ]);
-    return new PostResource($post);
+        $request->validate([
+            'reason' => 'required|max:500'
+        ]);
+        $post = Post::findOrFail($id);
+
+        if($post->status === 'rejected') {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'The post is already rejected'
+            ]);
+        }
+
+        $post->update([
+            'status' => 'rejected'
+        ]);
+        PostRejectReason::create([
+            'user_id'   => $request->user()->id,
+            'post_id' => $id,
+            'reason' => $request->reason
+        ]);
+        return new PostResource($post);
     }
 
     /**
