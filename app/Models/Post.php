@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
 
-    protected $fillable = [ 'content', 'user_id', ];
+    protected $fillable = [ 'content', 'user_id', 'status' ];
     public function user() {
         return $this->belongsTo(User::class);
     }
@@ -22,5 +22,9 @@ class Post extends Model
 
     public function reports() {
         return $this->hasMany(Report::class);
+    }
+
+    public function rejectReason() {
+        return $this->hasOne(PostRejectReason::class);
     }
 }

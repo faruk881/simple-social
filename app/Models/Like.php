@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Like extends Model
 {
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $fillable = [ 'user_id','post_id'];
+
 }

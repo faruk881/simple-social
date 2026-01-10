@@ -44,6 +44,14 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     // Reports
     Route::post('/posts/{post}/report', [ReportController::class, 'store']);
+    
+    // Post operations
+    Route::post('/posts/{id}/approve',[PostController::class,'approve']);
+    Route::post('/posts/{id}/reject',[PostController::class,'reject']);
+    Route::get('/pending-posts',[PostController::class,'pendingPosts']);
+    Route::post('/post-comment',[PostController::class,'addComment']);
+    Route::post('/post-like',[PostController::class,'postLike']);
+
 });
 
 

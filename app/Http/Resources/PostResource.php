@@ -16,6 +16,11 @@ class PostResource extends JsonResource
     {
         return [
             'id'      => $this->id,
+            'status'  =>$this->status,
+            'reject_reason' => $this->when(
+                $this->status === 'rejected',
+                optional($this->rejectReason)->reason
+            ),
             'content' => $this->content,
             'author'  => [
                 'id'   => $this->user->id,
