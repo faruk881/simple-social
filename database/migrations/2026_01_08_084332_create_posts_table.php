@@ -19,6 +19,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->text('content');
+            $table->string('cover_image');
             $table->enum('status', ['pending','active', 'reported', 'hidden'])->default('pending');
             $table->timestamps();
         });

@@ -51,7 +51,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/posts/{id}/reject',[PostController::class,'reject']);
     Route::get('/pending-posts',[PostController::class,'pendingPosts']);
     Route::post('/post-comment',[PostController::class,'addComment']);
-    Route::post('/post-like',[PostController::class,'postLike']);
+    Route::post('/post-like-toggle',[PostController::class,'postLike']);
 
 });
 

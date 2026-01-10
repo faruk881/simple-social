@@ -152,12 +152,14 @@ class PostController extends Controller
         $userId = $request->user()->id;
         $alreadyLiked = Like::where('user_id', $userId)
         ->where('post_id', $request->post_id)
-        ->exists();
+        ->first();
 
         if ($alreadyLiked) {
+
+            $alreadyLiked->delete();
             return response()->json([
                 'status'  => 0,
-                'message' => 'You already liked this post.',
+                'message' => 'Unliked',
             ], 409);
         }
         
