@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\PostRejectReason;
+use App\Models\Report;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -208,6 +209,30 @@ class PostController extends Controller
             'status' => 'rejected'
         ]);
         PostRejectReason::create([
+            'user_id'   => $request->user()->id,
+            'post_id' => $id,
+            'reason' => $request->reason
+        ]);
+        return new PostResource($post);
+    }
+    public function report(Request $request, $id) {
+
+        $request->validate([
+            'reason' => 'required|max:500'
+        ]);
+        $post = Post::findOrFail($id);
+
+        // if($post->status === 'rejected') {
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'The post is already rejected'
+        //     ]);
+        // }
+
+        // $post->update([
+        //     'status' => 'rejected'
+        // ]);
+        Report::create([
             'user_id'   => $request->user()->id,
             'post_id' => $id,
             'reason' => $request->reason

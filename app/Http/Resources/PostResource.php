@@ -31,6 +31,12 @@ class PostResource extends JsonResource
             'liked_by_me' => $this->likes->contains('user_id', auth()->id()),
 
             'comments' => CommentResource::collection($this->comments),
+ 
+                'reports' => $this->reports->isNotEmpty()
+                ? ReportResource::collection($this->reports)
+                : [
+                    'message' => 'No one reported this post.'
+                ],
 
             'created_at' => $this->created_at->diffForHumans(),
         ];
